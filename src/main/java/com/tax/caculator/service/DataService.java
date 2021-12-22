@@ -32,7 +32,7 @@ public class DataService {
         String line = "";
         String splitBy = ",";
         try {
-            BufferedReader br = new BufferedReader(new FileReader("/Users/rmalav/Downloads/invoice.csv"));
+            BufferedReader br = new BufferedReader(new FileReader("/Users/rmalav/IdeaProjects/caculator/invoice.csv"));
             while ((line = br.readLine()) != null) {
                 String[] customerData = line.split(splitBy);
                 if (headers == null) {
@@ -76,7 +76,7 @@ public class DataService {
 
     public void writeDataOnfile() {
         headers.add("tax");
-        File file = new File("/Users/rmalav/Downloads/result.csv");
+        File file = new File("/Users/rmalav/IdeaProjects/caculator/result.csv");
         try {
             // create FileWriter object with file as parameter
             FileWriter outputfile = new FileWriter(file);
