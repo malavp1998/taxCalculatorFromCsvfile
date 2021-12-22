@@ -13,7 +13,7 @@ import java.util.Map;
 public class DataService {
 
     ArrayList<Data> inputData = new ArrayList<>();
-    ArrayList<String> headres = null;
+    ArrayList<String> headers = null;
     Map<Integer, Integer> itemTypeMapsTaxRate = new HashMap<>();
 
     public DataService() {
@@ -22,9 +22,9 @@ public class DataService {
         itemTypeMapsTaxRate.put(2, 18);
     }
 
-    public DataService(ArrayList<Data> inputData, ArrayList<String> headres, Map<Integer, Integer> itemTypeMapsTaxRate) {
+    public DataService(ArrayList<Data> inputData, ArrayList<String> headers, Map<Integer, Integer> itemTypeMapsTaxRate) {
         this.inputData = inputData;
-        this.headres = headres;
+        this.headers = headers;
         this.itemTypeMapsTaxRate = itemTypeMapsTaxRate;
     }
 
@@ -35,10 +35,10 @@ public class DataService {
             BufferedReader br = new BufferedReader(new FileReader("/Users/rmalav/Downloads/invoice.csv"));
             while ((line = br.readLine()) != null) {
                 String[] customerData = line.split(splitBy);
-                if (headres == null) {
-                    headres = new ArrayList<>();
+                if (headers == null) {
+                    headers = new ArrayList<>();
                     for (int i = 0; i < customerData.length; i++) {
-                        headres.add(customerData[0]);
+                        headers.add(customerData[0]);
                     }
                 } else {
                     System.out.println(customerData[0] + ", " + customerData[1] + ", " + customerData[2]);
@@ -60,8 +60,8 @@ public class DataService {
         for (Data d : inputData) {
             if (itemTypeMapsTaxRate.containsKey(d.getItem_type()) == true) {
 
-                double tax = getTaxFromData(d.getAmount(), itemTypeMapsTaxRate.get(d.getItem_type()) );
-             //   double tax = (d.getAmount() * itemTypeMapsTaxRate.get(d.getItem_type())) / 100;
+                double tax = getTaxFromData(d.getAmount(), itemTypeMapsTaxRate.get(d.getItem_type()));
+                //   double tax = (d.getAmount() * itemTypeMapsTaxRate.get(d.getItem_type())) / 100;
                 d.setTax(tax);
             } else {
                 d.setTax(-1);
@@ -69,35 +69,14 @@ public class DataService {
         }
     }
 
-    public double getTaxFromData(int amount, int taxRate)
-    {
-        return (amount * taxRate)/100;
+    public double getTaxFromData(int amount, int taxRate) {
+        return (amount * taxRate) / 100;
     }
 
 
     public void writeDataOnfile() {
-        headres.add("tax");
+        headers.add("tax");
         File file = new File("/Users/rmalav/Downloads/result.csv");
-        /*try {
-            // create FileWriter object with file as parameter
-            FileWriter outputfile = new FileWriter(file);
-
-            // create CSVWriter object filewriter object as parameter
-            CSVWriter writer = new CSVWriter(outputfile);
-            writer.writeNext((String[]) headres.toArray());
-
-            for(Data d : inputData)
-            {
-                writer.writeNext(new String[]{d.toString()});
-            }
-
-            writer.close();
-        }
-        catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }*/
-
         try {
             // create FileWriter object with file as parameter
             FileWriter outputfile = new FileWriter(file);
@@ -110,28 +89,16 @@ public class DataService {
 
             // adding header to csv
             String[] header = {"Name", "Class", "Marks"};
-            writer.writeNext(new String[]{headres.get(0), headres.get(1), headres.get(2), headres.get(3)});
+            writer.writeNext(new String[]{headers.get(0), headers.get(1), headers.get(2), headers.get(3)});
             for (Data d : inputData) {
                 writer.writeNext(new String[]{String.valueOf(d.getS_no()), String.valueOf(d.getAmount()), String.valueOf(d.getItem_type()), String.valueOf(d.getTax())});
             }
-
-            // add data to csv
-            //  String[] data1 = { "Aman", "10", "620" };
-            //  writer.writeNext(data1);
-            //  String[] data2 = { "Suraj", "10", "630" };
-            //  writer.writeNext(data2);
-
-            // closing writer connection
             writer.close();
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-    }
-
-    public double add(double a, double b) {
-        return a + b;
     }
 
 }
