@@ -24,7 +24,7 @@ public class DataController {
    }
 
     @GetMapping("/printdata")
-   public ArrayList<Data> printData()
+    public ArrayList<Data> printData()
    {
       return dataService.printCustomerData();
    }
